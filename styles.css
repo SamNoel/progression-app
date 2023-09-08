@@ -1,0 +1,95 @@
+*
+{
+    color: #FFFFFF;
+    font-family: 'Helvetica Neue', 'Roboto';
+    margin: 0;
+}
+
+.flex-container
+{
+    display: flex;
+}
+
+.flex-child
+{
+    flex: 1;
+    padding: 48px 40px;
+}
+
+h1, h2 
+{
+    font-weight: 500;
+}
+
+p 
+{
+    font-weight: 200;
+}
+
+.section-admin
+{
+    height: 100vh;
+    width: 20vw;
+    background-color: #272727; /* turn this into a token later */
+}
+
+.section-main
+{
+    height: 100vh;
+    width: 40vw;
+    background-color: #353535; /* turn this into a token later */
+}
+
+.section-drilldown
+{
+    height: 100vh;
+    width: 40vw;
+    background-color: #5C5C5C; /* turn this into a token later */
+}
+
+.divider-solid
+{
+    border-top: 1px solid #FFF;
+    margin: 32px 0px;
+}
+
+.element-progression-incomplete
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 16px;
+    margin: 8px 0px;
+    background-color: #4A4A4A;
+    border-radius: 5px;
+}
+
+.circular-progress
+{
+    position: relative;
+    height: 32px;
+    width: 32px;
+    background-color: #41A128;
+    border-radius: 50%;
+    background: conic-gradient(#41A128 3.6deg, #FFF 0deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.circular-progress::before
+{
+    content: "";
+    position: absolute;
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    background-color: #FFF;
+}
+
+.progress-value 
+{
+    position: relative;
+    font-size: 12px;
+    color: #41A128;
+}

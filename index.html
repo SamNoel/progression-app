@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="flex-container">
+            <!--ADMIN SECTION-->
+        <div class="section-admin flex-child">
+            <div><i></i><h1>Hi, Sam</h1></div> <!--Will be dynamic-->
+            <div class="nav-main">
+                <div><i></i><h2>All Progressions</h2></div>
+                <div><i></i><h2>Completed</h2></div>
+            </div>
+            <div class="nav-secondary"><i></i><h2>Logout</h2></div>
+        </div>
+
+        <!--MAIN SECTION-->
+        <div class="section-main flex-child">
+            <h1>All Progressions</h1>
+            <hr class="divider-solid">
+            <div class="section-active-progressions">
+                <div class="element-progression-incomplete">
+                    <div> <!--left side-->
+                        <i></i> <!--to house move icon-->
+                        <p class="title-progression">Progression Name</p> <!--will be dynamic-->    
+                    </div>
+                    <div class="circular-progress"> <!--right side-->
+                        <span class="progress-value"></span>
+                    </div>
+                </div>  
+                <div class="element-progression-incomplete">
+                    <div> <!--left side-->
+                        <i></i> <!--to house move icon-->
+                        <p class="title-progression">Progression Name</p> <!--will be dynamic-->    
+                    </div>
+                    <div class="circular-progress"> <!--right side-->
+                        <span class="progress-value"></span>
+                    </div>
+                </div>
+                <div class="element-progression-incomplete">
+                    <div> <!--left side-->
+                        <i></i> <!--to house move icon-->
+                        <p class="title-progression">Progression Name</p> <!--will be dynamic-->    
+                    </div>
+                    <div class="circular-progress"> <!--right side-->
+                        <span class="progress-value"></span>
+                    </div>
+                </div>            
+            </div>
+        </div>
+
+        <!--DRILLDOWN SECTION-->
+        <div class="section-drilldown flex-child">
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
