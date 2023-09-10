@@ -8,6 +8,7 @@
 .flex-container
 {
     display: flex;
+    height: 100%;
 }
 
 .flex-child
@@ -28,8 +29,16 @@ p
 
 .section-admin
 {
+    position: sticky;
+    top: 0;
+    left: 0;
+    bottom: 0;
     height: 100vh;
-    width: 20vw;
+    flex-basis: 200px;
+	flex-grow: 0;
+	flex-shrink: 2;
+    overflow: hidden;
+    transition: all 0.25s ease-in-out;
     background-color: #272727; /* turn this into a token later */
 }
 
@@ -38,6 +47,63 @@ p
     height: 100vh;
     width: 40vw;
     background-color: #353535; /* turn this into a token later */
+}
+
+.menu
+{
+    height: 88%;
+    position: relative;
+    list-style: none;
+    padding: 0;
+}
+
+.menu li 
+{
+    padding: 1rem;
+    margin: 8px 0;
+    border-radius: 5px;
+    transition: all 0.25s ease-in-out;
+}
+
+.menu li:hover, .active
+{
+    background: #353535;
+}
+
+ul
+{
+    list-style: none;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu a 
+{
+    font-size: 16px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.menu a span
+{
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.menu a i 
+{
+    font-size: 1.2rem;
+}
+
+.logout
+{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80%;
 }
 
 .section-drilldown
@@ -49,8 +115,10 @@ p
 
 .divider-solid
 {
-    border-top: 1px solid #FFF;
+    border-top: 1px solid #4A4A4A;
     margin: 32px 0px;
+    width: 100%;
+    opacity: 25%;
 }
 
 .element-progression-incomplete
@@ -64,11 +132,28 @@ p
     border-radius: 5px;
 }
 
+.element-progression-incomplete:hover
+{
+    background-color: #5C5C5C;
+}
+
+.element-left
+{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.fa-ellipsis-vertical
+{
+    padding-right: 16px;
+}
+
 .circular-progress
 {
     position: relative;
-    height: 32px;
-    width: 32px;
+    height: 40px;
+    width: 40px;
     background-color: #41A128;
     border-radius: 50%;
     background: conic-gradient(#41A128 3.6deg, #FFF 0deg);
@@ -81,15 +166,40 @@ p
 {
     content: "";
     position: absolute;
-    height: 24px;
-    width: 24px;
+    height: 32px;
+    width: 32px;
     border-radius: 50%;
-    background-color: #FFF;
+    background-color: #4A4A4A;
 }
 
 .progress-value 
 {
     position: relative;
     font-size: 12px;
-    color: #41A128;
+    color: #FFF;
+}
+
+.new-progression-form
+{
+}
+
+.input-box-container
+{
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#input-box 
+{
+    width: 100%;
+    background-color: #353535;
+    border-style: none;
+    border-bottom: 1px solid #FFF;
+}
+
+.btn-add
+{
+    position: absolute;
+    justify-content: right;
 }

@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/76923946a5.js" crossorigin="anonymous"></script>
     <title>Document</title>
 </head>
 <body>
@@ -12,45 +13,54 @@
             <!--ADMIN SECTION-->
         <div class="section-admin flex-child">
             <div><i></i><h1>Hi, Sam</h1></div> <!--Will be dynamic-->
-            <div class="nav-main">
-                <div><i></i><h2>All Progressions</h2></div>
-                <div><i></i><h2>Completed</h2></div>
-            </div>
-            <div class="nav-secondary"><i></i><h2>Logout</h2></div>
+            <hr class="divider-solid">
+            <ul class="menu">
+                <li class="active">
+                    <a href="#">
+                        <i class="fa-solid fa-spinner"></i>
+                        <span>In Progress</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa-regular fa-circle"></i>
+                        <span>Completed</span>
+                    </a>
+                </li>
+                <li class="logout">
+                    <a href="#">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
         </div>
 
         <!--MAIN SECTION-->
         <div class="section-main flex-child">
-            <h1>All Progressions</h1>
+            <h1>Current Progressions</h1>
             <hr class="divider-solid">
             <div class="section-active-progressions">
-                <div class="element-progression-incomplete">
-                    <div> <!--left side-->
-                        <i></i> <!--to house move icon-->
-                        <p class="title-progression">Progression Name</p> <!--will be dynamic-->    
+                <ul class="active-progessions" id="list-container">
+                    <li class="element-progression-incomplete">
+
+                        <div class="element-left"> <!--left side-->
+                            <i class="fa-solid fa-ellipsis-vertical"></i> <!--to house move icon-->
+                            <p class="title-progression">Progression Name</p> <!--will be dynamic-->    
+                        </div>
+                        <div class="circular-progress"> <!--right side-->
+                            <span class="progress-value"></span>
+                        </div>
+
+                    </li>
+                </ul>  
+                <div class="new-progression-form">
+                    <div class="input-box-container">
+                        <i class="fa-solid fa-plus"></i>
+                        <input type='text' id='input-box' placeholder="Add a progression..."/>     
                     </div>
-                    <div class="circular-progress"> <!--right side-->
-                        <span class="progress-value"></span>
-                    </div>
-                </div>  
-                <div class="element-progression-incomplete">
-                    <div> <!--left side-->
-                        <i></i> <!--to house move icon-->
-                        <p class="title-progression">Progression Name</p> <!--will be dynamic-->    
-                    </div>
-                    <div class="circular-progress"> <!--right side-->
-                        <span class="progress-value"></span>
-                    </div>
-                </div>
-                <div class="element-progression-incomplete">
-                    <div> <!--left side-->
-                        <i></i> <!--to house move icon-->
-                        <p class="title-progression">Progression Name</p> <!--will be dynamic-->    
-                    </div>
-                    <div class="circular-progress"> <!--right side-->
-                        <span class="progress-value"></span>
-                    </div>
-                </div>            
+                    <button onclick="addProgression()" class="btn-add">Add</button> 
+                </div> 
             </div>
         </div>
 
