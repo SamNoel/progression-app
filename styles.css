@@ -94,7 +94,7 @@ p
 
 .menu li:hover, .active
 {
-    background: #353535;
+    background: #8054FD;
     cursor: pointer;
 }
 
@@ -164,6 +164,8 @@ ul
     margin: 8px 0px;
     background-color: #4A4A4A;
     border-radius: 5px;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .list-item:hover
@@ -174,7 +176,7 @@ ul
 
 .list-item:active
 {
-    background-color: #5C5C5C;
+    background-color: #8054FD;
 }
 
 .element-left
