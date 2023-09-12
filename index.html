@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://kit.fontawesome.com/76923946a5.js" crossorigin="anonymous"></script>
     <title>Document</title>
 </head>
@@ -12,9 +13,14 @@
     <div class="flex-container">
             <!--ADMIN SECTION-->
         <div class="section-admin flex-child">
-            <div><i></i><h1>Hi, Sam</h1></div> <!--Will be dynamic-->
-            <hr class="divider-solid">
             <ul class="menu">
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <hr class="divider-solid">
                 <li class="active">
                     <a href="#">
                         <i class="fa-solid fa-spinner"></i>
@@ -29,7 +35,7 @@
                 </li>
                 <li class="logout">
                     <a href="#">
-                        <i class="fa-solid fa-user"></i>
+                        <i class="fa-regular fa-user"></i>
                         <span>Logout</span>
                     </a>
                 </li>
@@ -40,9 +46,9 @@
         <div class="section-main flex-child">
             <h1>Current Progressions</h1>
             <hr class="divider-solid">
-            <div class="section-active-progressions">
-                <ul class="active-progessions" id="list-container">
-                    <li class="element-progression-incomplete">
+            <div class="active-progressions-container">
+                <ul class="progressions-list list-container" id="id-active-progressions-list">
+                    <li class="list-item active-progression-item">
 
                         <div class="element-left"> <!--left side-->
                             <i class="fa-solid fa-ellipsis-vertical"></i> <!--to house move icon-->
@@ -54,19 +60,44 @@
 
                     </li>
                 </ul>  
-                <div class="new-progression-form">
+                <div class="add-form-container new-progression-form">
                     <div class="input-box-container">
                         <i class="fa-solid fa-plus"></i>
-                        <input type='text' id='input-box' placeholder="Add a progression..."/>     
+                        <input type='text' id='id-active-progression-input-box' class="input-box" placeholder="Add a progression..."/>     
                     </div>
-                    <button onclick="addProgression()" class="btn-add">Add</button> 
+                    <button onclick="addProgression()" id="id-add-progression" class="btn-add">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button> 
                 </div> 
             </div>
         </div>
 
         <!--DRILLDOWN SECTION-->
         <div class="section-drilldown flex-child">
+            <h1>Progression Name</h1>
+            <hr class="divider-solid">
+            <div class="steps-container">
+                <ul class="steps-list list-container" id="id-steps-list">
+                    <li class="list-item step-item">
 
+                        <div class="element-left"> <!--left side-->
+                            <i class="fa-solid fa-ellipsis-vertical"></i> <!--to house move icon-->
+                            <p class="title-progression">Step 1</p> <!--will be dynamic-->    
+                        </div>
+                        <span class="completion-circle" onclick="checkOffStep(this)"></span>
+
+                    </li>
+                </ul>  
+                <div class="add-form-container new-step-form">
+                    <div class="input-box-container">
+                        <i class="fa-solid fa-plus"></i>
+                        <input type='text' id='input-box-step' class="input-box" placeholder="Add a step..."/>     
+                    </div>
+                    <button onclick="addStep()" id="id-add-step" class="btn-add">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button> 
+                </div> 
+            </div>
         </div>
 
     </div>
