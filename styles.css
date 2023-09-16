@@ -73,7 +73,7 @@ p
     overflow-x: hidden;
     height: 100vh;
     width: 40vw;
-    background-color: #353535; /* turn this into a token later */
+    background-color: #202020; /* turn this into a token later */
 }
 
 .menu
@@ -92,7 +92,13 @@ p
     transition: all 0.25s ease-in-out;
 }
 
-.menu li:hover, .active
+.menu li:hover
+{
+    background: #3c3352;
+    cursor: pointer;
+}
+
+.active
 {
     background: #8054FD;
     cursor: pointer;
@@ -143,7 +149,7 @@ ul
     overflow-x: hidden;
     height: 100vh;
     width: 40vw;
-    background-color: #353535; /* turn this into a token later */
+    background-color: #202020; /* turn this into a token later */
     border-left: 1px solid rgba(255, 255, 255, 0.25);
 }
 
@@ -248,7 +254,7 @@ ul
 .input-box 
 {
     width: 100%;
-    background-color: #353535;
+    background-color: #202020;
     border-style: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
     padding: 16px 0px 16px 16px;
@@ -263,7 +269,7 @@ ul
 .btn-add
 {
     padding: 12px 16px;
-    background-color: #353535;
+    background-color: #202020;
     border-style: none;
     border-radius: 50%;
     flex-shrink: 0;
@@ -307,4 +313,71 @@ ul
 .checked > .completion-circle
 {
     background-image: url(assets/circle-check-solid.svg);
+}
+
+.rightclick-menu-wrapper
+{
+    position: fixed;
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    height: 0px;
+    width: 100px;
+    background-color: #353535;
+    border-radius: 5px;
+    border: 1px solid #ffffff55;
+    z-index: 2;
+}
+
+.rightclick-menu-container
+{
+    width: 100%;
+}
+
+.rightclick-menu-item
+{
+    display: flex;
+    align-items: center;
+    padding: 12px 8px;
+    margin: 0px;
+    font-weight: 200;
+}
+
+.rightclick-menu-item:hover
+{
+    background-color: #5C5C5C;
+    cursor: pointer;
+}
+
+.righclick-menu-divider
+{
+    border-top: 1px solid #4A4A4A;
+    width: 100%;
+    opacity: 25%;
+}
+
+.title-step:focus
+{
+    outline: none;
+}
+
+#id-drilldown-none-selected
+{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 80%;
+    opacity: 25%;
+}
+
+#id-drilldown-none-selected i
+{
+    font-size: 5rem;
+    margin-bottom: 16px;
+}
+
+#id-drilldown-none-selected h1
+{
+    text-align: center;
 }

@@ -9,31 +9,31 @@
     <script src="https://kit.fontawesome.com/76923946a5.js" crossorigin="anonymous"></script>
     <title>Document</title>
 </head>
-<body>
+<body onload="loadData()">
     <div class="flex-container">
             <!--ADMIN SECTION-->
         <div class="section-admin flex-child">
             <ul class="menu">
-                <li>
+                <li class="menu-item" id="id-profile-tab" onclick="getTabData(this)">
                     <a href="#">
                         <i class="fa-solid fa-user"></i>
                         <span>Profile</span>
                     </a>
                 </li>
                 <hr class="divider-solid">
-                <li class="active">
+                <li class="active menu-item" id="id-in-progress-tab" onclick="getTabData(this)">
                     <a href="#">
                         <i class="fa-solid fa-spinner"></i>
                         <span>In Progress</span>
                     </a>
                 </li>
-                <li>
+                <li class="menu-item" id="id-completed-tab" onclick="getTabData(this)">
                     <a href="#">
                         <i class="fa-regular fa-circle"></i>
                         <span>Completed</span>
                     </a>
                 </li>
-                <li class="logout">
+                <li class="logout menu-item" id="id-logout-tab" onclick="getTabData(this)">
                     <a href="#">
                         <i class="fa-regular fa-user"></i>
                         <span>Logout</span>
@@ -44,13 +44,13 @@
 
         <!--MAIN SECTION-->
         <div class="section-main flex-child">
-            <h1>Current Progressions</h1>
+            <h1 id="id-main-section-title">Current Progressions</h1>
             <hr class="divider-solid">
             <div class="active-progressions-container">
                 <ul class="progressions-list list-container" id="id-active-progressions-list">
                     <!--POPULATED DYNAMICALLY-->
                 </ul>  
-                <div class="add-form-container new-progression-form">
+                <div class="add-form-container new-progression-form" id="id-new-progression-form">
                     <div class="input-box-container">
                         <i class="fa-solid fa-plus"></i>
                         <input type='text' id='id-active-progression-input-box' class="input-box" placeholder="Add a progression..."/>     
@@ -64,21 +64,35 @@
 
         <!--DRILLDOWN SECTION-->
         <div class="section-drilldown flex-child">
-            <h1 id="id-drilldown-title">Progression Name</h1>
-            <hr class="divider-solid">
-            <div class="steps-container">
-                <ul class="steps-list list-container" id="id-steps-list">
-                    <!--POPULATED DYNAMICALLY-->
-                </ul>  
-                <div class="add-form-container new-step-form">
-                    <div class="input-box-container">
-                        <i class="fa-solid fa-plus"></i>
-                        <input type='text' id='input-box-step' class="input-box" placeholder="Add a step..."/>     
-                    </div>
-                    <button onclick="addStep()" id="id-add-step" class="btn-add">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </button> 
-                </div> 
+            <div id="id-drilldown-wrapper">
+                <div class="rightclick-menu-wrapper">
+                    <ul class="rightclick-menu-container">
+                        <li class="rightclick-menu-item" id="edit" onclick="editStep()">Edit</li>
+                        <li class="rightclick-menu-item" id="duplicate" onclick="duplicateStep()">Duplicate</li>
+                        <li><hr class="righclick-menu-divider"></li>
+                        <li class="rightclick-menu-item" id="delete" onclick="deleteStep()">Delete</li>
+                    </ul>
+                </div>
+                <h1 id="id-drilldown-title"></h1><!--POPULATED DYNAMICALLY-->
+                <hr class="divider-solid">
+                <div class="steps-container">
+                    <ul class="steps-list list-container" id="id-steps-list">
+                        <!--POPULATED DYNAMICALLY-->
+                    </ul>  
+                    <div class="add-form-container new-step-form">
+                        <div class="input-box-container">
+                            <i class="fa-solid fa-plus"></i>
+                            <input type='text' id='input-box-step' class="input-box" placeholder="Add a step..."/>     
+                        </div>
+                        <button onclick="addStep()" id="id-add-step" class="btn-add">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button> 
+                    </div> 
+                </div>    
+            </div>
+            <div id="id-drilldown-none-selected">
+                <i class="fa-solid fa-note-sticky" style="color: #ffffff;"></i>
+                <h1>Select a progression to view details</h1>
             </div>
         </div>
 
