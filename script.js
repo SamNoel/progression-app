@@ -165,6 +165,7 @@ function resetActiveItems(){
     activeProgressionObject = null;
     activeStepElement = null;
     activeStepObject = null;
+    setDrilldownPlaceholder();
 }
 
 //----------------EVENT LISTENERS-------------------
@@ -537,33 +538,16 @@ function duplicateListItem(){
         //clone the element + any child elements in the node tree
         let duplicatedElement = activeProgressionElement.cloneNode(true);
 
-        //find the matching progression
-        //let originalProgression = progressionArray.find(x => x.identifier == activeProgressionObject.identifier);
-
         //create a new step from this
-        let newProgression = new Progression(activeProgressionObject.progressionName, activeProgressionObject.percentComplete, activeProgressionObject.completedSteps);
+        let newProgression = new Progression((activeProgressionObject.progressionName + " copy"), activeProgressionObject.percentComplete, activeProgressionObject.completedSteps);
+
+        duplicatedElement.querySelector("p").textContent = newProgression.progressionName;
 
         let currentStep = null;
-        let currentStepElement = null;
-        let stepNums = null;
-        let newId = null;
 
+        //add each step to the new object and update ids
         activeProgressionObject.steps.forEach(step => {
-            currentStep = step;
-
-            //update the id in the UI as well
-            //this is hideous code but whatever for now
-            stepNums = duplicatedElement.getElementsByTagName("li");
-            for(let item of stepNums){
-                if (item.id == step.identifier){
-                    newId = uuidv4();
-                    item.id = newId;
-                    currentStep.identifier = newId;    
-                }
-            }
-            // currentStepElement = duplicatedElement.querySelector(`#${step.identifier}`);
-            // currentStepElement.id = currentStep.identifier;
-
+            currentStep = new Step(step.stepName, step.checked, newProgression.identifier);
             newProgression.steps.push(currentStep);
         });
 
