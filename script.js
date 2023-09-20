@@ -1,3 +1,35 @@
+/**
+ * TO DO:
+ * 
+ * --Front end
+ * Mobile responsiveness (use breakpoints)
+ * Convert things to tokens like colors and other styles
+ * CRUD operations for progressions (add context menu to each item and refactor methods)
+ * MOVE functionality for steps and progressions
+ * Possibly move icon files to local files (maybe do this later)
+ * Login screen
+ * Profile tab with overview (maybe change this to Dashboard)
+ * 
+ * --Back end
+ * MySQL DB setup and schema
+ * Hosting server (self host -- need to research best options for this)
+ * JSON web calls and parsing etc., connecting objects to front end
+ * Domain name registration
+ * Analytics setup (maybe later)
+ * 
+ * --Testing
+ * Load testing
+ * Bug testing
+ * Login functionality testing
+ * Responsiveness
+ * Browser support testing
+ */
+
+/**
+ * EVENTUALLY:
+ * Categories for progressions - these will inform the dashboard data
+ */
+
 //----------------OBJECTS-------------------
 class Step {
     constructor(stepName, checked = false, parentIdentifier = null) {
@@ -16,7 +48,8 @@ class Progression {
         this.steps = steps;
         this.identifier = uuidv4();
         this.totalSteps = steps.length;
-        this.completedSteps = steps.filter(x => x.checked == true).length;
+        this.completedSteps = completedSteps;
+        //this.completedSteps = steps.length == 0 ? 0 : steps.filter(x => x.checked == true).length;
     }
 }
 
@@ -32,12 +65,7 @@ let prog1 = new Progression("Progression 1", '', 65, steps1),
     prog3 = new Progression("Progression 3", '', 0),
     prog4 = new Progression("Progression 4", '', 0);
 
-let progressionArray = [
-    //prog1,
-    //prog2,
-    //prog3,
-    //prog4
-];
+let progressionArray = [];
 
 //----------------WAIT FOR DOM LOAD-------------------
 // window.addEventListener("DOMContentLoaded", () => {
@@ -54,8 +82,12 @@ const addStepInputBox = document.getElementById("input-box-step");
 const listContainer = document.getElementById("id-active-progressions-list");
 const stepsContainer = document.getElementById("id-steps-list");
 const contextMenuWrapper = document.querySelector(".rightclick-menu-wrapper");
-var activeProgression = null;
-var activeStep = null;
+const progressionTag = 1;
+const stepTag = 2;
+var activeProgressionElement = null;
+var activeStepElement = null;
+var activeProgressionObject = null;
+var activeStepObject = null;
 var currentTab = null;
 var drilldownTitle = document.getElementById("id-drilldown-title");
 
@@ -65,13 +97,21 @@ function uuidv4() {
     (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
 };
 
-function addContextMenu(listItem) {
+function addContextMenu(listItem, tagType) {
     
     //add the event listener for the context menu
     listItem.addEventListener("contextmenu", e => {
         
-        //set the active step when the context menu is shown (right click)
-        activeStep = document.getElementById(listItem.id);
+        //set the active progression or step when the context menu is shown (right click)
+        if(tagType == 1){
+            activeProgressionElement = document.getElementById(listItem.id);
+            activeProgressionObject = progressionArray.find(x => x.identifier == listItem.id);
+            activeStepElement = null;
+        }
+        else if (tagType == 2){
+            activeStepElement = document.getElementById(listItem.id);
+            activeStepObject = activeProgressionObject.steps.find(x => x.identifier == listItem.id);
+        }
 
         //prevent default context menu
         e.preventDefault();
@@ -100,7 +140,7 @@ function setDrilldownPlaceholder(){
     let placeholder = document.getElementById("id-drilldown-none-selected");
     let drilldownWrapper = document.getElementById("id-drilldown-wrapper");
 
-    if(activeProgression == null){
+    if(activeProgressionElement == null){
         placeholder.style.display = "flex";
         drilldownWrapper.style.display = "none";
     }
@@ -108,6 +148,23 @@ function setDrilldownPlaceholder(){
         placeholder.style.display = "none";
         drilldownWrapper.style.display = "block";
     }
+}
+
+function setActiveProgressionValues(progressionId){
+    activeProgressionElement = document.getElementById(progressionId);
+    activeProgressionObject = progressionArray.find(x => x.identifier == progressionId);
+}
+
+function setActiveStepValues(stepId){
+    activeStepElement = document.getElementById(stepId);
+    activeStepObject = activeProgressionObject.steps.find(x => x.identifier == stepId);
+}
+
+function resetActiveItems(){
+    activeProgressionElement = null;
+    activeProgressionObject = null;
+    activeStepElement = null;
+    activeStepObject = null;
 }
 
 //----------------EVENT LISTENERS-------------------
@@ -145,7 +202,7 @@ function getTabData(e){
     let listContainer = e.closest("ul");
 
     //reset the active progression
-    activeProgression = null;
+    resetActiveItems();
 
     //clear the drilldown
     setDrilldownPlaceholder();
@@ -164,7 +221,7 @@ function getTabData(e){
         e.classList.add("active");
         getProgressions("complete");
     }
-    else if(e.id == "id-profile-tab"){
+    else if(e.id == "id-dashboard-tab"){
         e.classList.add("active");
     }
     else if(e.id == "id-logout-tab"){
@@ -210,6 +267,8 @@ function getProgressions(category){
             <div class="circular-progress" style="background: conic-gradient(#41A128 ${currentProgression.percentComplete * 3.6}deg, #FFF 0deg);"> <!--right side-->
                 <span class="progress-value">${currentProgression.percentComplete}%</span>
             </div>`;
+        
+        li = addContextMenu(li, progressionTag);
     
         //add to the list container (the UL)
         listContainer.appendChild(li);
@@ -224,20 +283,21 @@ function getProgressionSteps(progressionId){
     currentLI.classList.add("selected");
 
     //set the active progression
-    activeProgression = progressionArray.find(x => x.identifier === progressionId);
+    activeProgressionElement = document.getElementById(progressionId);
+    activeProgressionObject = progressionArray.find(x => x.identifier === progressionId);
 
     //display the drilldown
     setDrilldownPlaceholder();
 
     //update the section title
-    drilldownTitle.textContent = activeProgression.progressionName;
+    drilldownTitle.textContent = activeProgressionObject.progressionName;
 
     //clear the content of the Steps section before populating
     stepsContainer.textContent = "";
     
-    if (activeProgression.steps.length > 0){
+    if (activeProgressionObject.steps.length > 0){
         //loop through the steps of the current progression and add to the DOM
-        activeProgression.steps.forEach((step) => {
+        activeProgressionObject.steps.forEach((step) => {
             let li = document.createElement("li");
             li.classList.add("list-item", "step-item");
             li.setAttribute("id", `${step.identifier}`)
@@ -253,7 +313,7 @@ function getProgressionSteps(progressionId){
             <span class="completion-circle" onclick="checkOffStep(this)"></span>`;
 
             //add the context menu for right click
-            li = addContextMenu(li);
+            li = addContextMenu(li, stepTag);
 
             stepsContainer.appendChild(li);
         })
@@ -304,6 +364,9 @@ function addProgression(){
         <div class="circular-progress" style="background: conic-gradient(#41A128 ${newProgression.percentComplete * 3.6}deg, #FFF 0deg);"> <!--right side-->
             <span class="progress-value">${newProgression.percentComplete}%</span>
         </div>`;
+
+        li = addContextMenu(li, progressionTag);
+
         listContainer.appendChild(li);
     }
 
@@ -314,15 +377,15 @@ function addProgression(){
 //----------------ADD NEW STEP-------------------
 function addStep(){
     //make sure there is a currently active progression
-    if(activeProgression != null){
+    if(activeProgressionObject != null){
         if(addStepInputBox.value === ''){
             alert("You must add text to create a step.");
         }
         else{
-            let newStep = new Step(addStepInputBox.value, false, parentIdentifier = activeProgression.identifier);
+            let newStep = new Step(addStepInputBox.value, false, parentIdentifier = activeProgressionObject.identifier);
 
             //add the step to the active progression
-            activeProgression.steps.push(newStep);
+            activeProgressionObject.steps.push(newStep);
 
             //populate the DOM
             let li = document.createElement("li");
@@ -336,7 +399,7 @@ function addStep(){
             <span class="completion-circle" onclick="checkOffStep(this)"></span>
             `;
 
-            li = addContextMenu(li);
+            li = addContextMenu(li, stepTag);
 
             stepsContainer.appendChild(li);
 
@@ -356,16 +419,16 @@ function addStep(){
 //----------------COMPLETE A STEP-------------------
 function checkOffStep(e){
     //get the closest li element (basically finds the parent li - the step element)
-    let stepElement = e.closest("li");
-    let stepObj = activeProgression.steps.find(x => x.identifier === stepElement.id);
+    activeStepElement = e.closest("li");
+    activeStepObject = activeProgressionObject.steps.find(x => x.identifier === activeStepElement.id);
 
-    if(stepElement.classList.contains("checked")){
-        stepElement.classList.remove("checked");
-        stepObj.checked = false;
+    if(activeStepElement.classList.contains("checked")){
+        activeStepElement.classList.remove("checked");
+        activeStepObject.checked = false;
     }
     else{
-        stepElement.classList.add("checked");
-        stepObj.checked = true;
+        activeStepElement.classList.add("checked");
+        activeStepObject.checked = true;
     }
 
     setCompletionValue();
@@ -373,14 +436,17 @@ function checkOffStep(e){
 
 function setCompletionValue(){
     //set values for total and completed steps
-    activeProgression.totalSteps = activeProgression.steps.length;
-    activeProgression.completedSteps = activeProgression.steps.filter(x => x.checked == true).length;
+    activeProgressionObject.totalSteps = activeProgressionObject.steps.length;
+    activeProgressionObject.completedSteps = activeProgressionObject.steps.filter(x => x.checked == true).length;
 
-    if(activeProgression.totalSteps != 0){
-        activeProgression.percentComplete = Math.round((activeProgression.completedSteps * 100.0) / activeProgression.totalSteps);
+    console.log("Total Steps: " + activeProgressionObject.totalSteps);
+    console.log("Completed Steps: " + activeProgressionObject.completedSteps);
+
+    if(activeProgressionObject.totalSteps != 0 && activeProgressionObject.completedSteps != 0){
+        activeProgressionObject.percentComplete = Math.round((activeProgressionObject.completedSteps * 100.0) / activeProgressionObject.totalSteps);
     }
     else{
-        activeProgression.percentComplete = 0;
+        activeProgressionObject.percentComplete = 0;
     }
 
     updateCompletionInUI();
@@ -401,47 +467,58 @@ function setCompletionValue(){
 }
 
 function updateCompletionInUI(){
-    let progressionElement = document.getElementById(activeProgression.identifier);
-    let progressValue = progressionElement.querySelector(".progress-value");
-    let circularProgress = progressionElement.querySelector(".circular-progress");
+    let progressValue = activeProgressionElement.querySelector(".progress-value");
+    let circularProgress = activeProgressionElement.querySelector(".circular-progress");
 
-    progressValue.textContent = `${activeProgression.percentComplete}%`;
-    circularProgress.style.background = `conic-gradient(#41A128 ${activeProgression.percentComplete * 3.6}deg, #FFF 0deg)`;
+    progressValue.textContent = `${activeProgressionObject.percentComplete}%`;
+    circularProgress.style.background = `conic-gradient(#41A128 ${activeProgressionObject.percentComplete * 3.6}deg, #FFF 0deg)`;
 }
 
-//----------------DELETE A STEP-------------------
-function deleteStep(){
-    if(activeStep != null){
-        activeStep.remove();
+//----------------DELETE LIST ITEM-------------------
+function deleteListItem(){
+    if(activeStepElement != null && activeStepObject != null){
+        activeStepElement.remove();
 
         //remove from array
-        activeProgression.steps = activeProgression.steps.filter(x => x.identifier !== activeStep.id);
+        activeProgressionObject.steps = activeProgressionObject.steps.filter(x => x.identifier !== activeStepObject.identifier);
 
         //update completion value
         setCompletionValue();
 
         //set active step back to null
-        activeStep = null;
+        activeStepElement = null;
+    }
+    else if (activeProgressionElement != null && activeProgressionObject != null){
+        activeProgressionElement.remove();
+
+        //remove from array
+        progressionArray = progressionArray.filter(x => x.identifier !== activeProgressionObject.identifier);
+
+        //reset the active progression and steps
+        resetActiveItems();
+
+        //clear the drilldown
+        setDrilldownPlaceholder();
     }
 }
 
-//----------------DUPLICATE A STEP-------------------
-function duplicateStep(){
-    if(activeStep != null){
+//----------------DUPLICATE LIST ITEM-------------------
+function duplicateListItem(){
+    if(activeStepElement != null && activeStepObject != null){
         //clone the element + any child elements in the node tree
-        let duplicatedElement = activeStep.cloneNode(true);
+        let duplicatedElement = activeStepElement.cloneNode(true);
 
         //find the matching step
-        let originalStep = activeProgression.steps.find(x => x.identifier == activeStep.id);
+        let originalStep = activeProgressionObject.steps.find(x => x.identifier == activeStepObject.identifier);
 
         //create a new step from this
         let newStep = new Step(originalStep.stepName, originalStep.checked, originalStep.parentIdentifier);
 
         //add to the array
-        activeProgression.steps.push(newStep);
+        activeProgressionObject.steps.push(newStep);
 
         //add the context menu
-        duplicatedElement = addContextMenu(duplicatedElement);
+        duplicatedElement = addContextMenu(duplicatedElement, stepTag);
 
         //update the id on the element to not be a dup of the original
         duplicatedElement.id = newStep.identifier;
@@ -453,20 +530,80 @@ function duplicateStep(){
         setCompletionValue();       
 
         //set active step back to null
-        activeStep = null;
+        activeStepElement = null;
+        activeStepObject = null;
+    }
+    else if (activeProgressionElement != null && activeProgressionObject != null){
+        //clone the element + any child elements in the node tree
+        let duplicatedElement = activeProgressionElement.cloneNode(true);
+
+        //find the matching progression
+        //let originalProgression = progressionArray.find(x => x.identifier == activeProgressionObject.identifier);
+
+        //create a new step from this
+        let newProgression = new Progression(activeProgressionObject.progressionName, activeProgressionObject.percentComplete, activeProgressionObject.completedSteps);
+
+        let currentStep = null;
+        let currentStepElement = null;
+        let stepNums = null;
+        let newId = null;
+
+        activeProgressionObject.steps.forEach(step => {
+            currentStep = step;
+
+            //update the id in the UI as well
+            //this is hideous code but whatever for now
+            stepNums = duplicatedElement.getElementsByTagName("li");
+            for(let item of stepNums){
+                if (item.id == step.identifier){
+                    newId = uuidv4();
+                    item.id = newId;
+                    currentStep.identifier = newId;    
+                }
+            }
+            // currentStepElement = duplicatedElement.querySelector(`#${step.identifier}`);
+            // currentStepElement.id = currentStep.identifier;
+
+            newProgression.steps.push(currentStep);
+        });
+
+        //add to the array
+        progressionArray.push(newProgression);
+
+        //add the context menu
+        duplicatedElement = addContextMenu(duplicatedElement, stepTag);
+
+        //update the id on the element to not be a dup of the original
+        duplicatedElement.id = newProgression.identifier;
+
+        //add to the UI
+        listContainer.appendChild(duplicatedElement);
+
+        //update completion value
+        setCompletionValue();       
+
+        //reset active items
+        resetActiveItems();
+
+        console.log("New progression steps length: " + newProgression.steps.length);
     }
 }
 
-//----------------EDIT A STEP-------------------
-function editStep(){
-    if(activeStep != null){
+//----------------EDIT LIST ITEM-------------------
+function editListItem(){
+    console.log("Active Step: " + activeStepObject);
+    console.log("Active Progression: " + activeProgressionObject.progressionName);
+
+    if(activeStepElement != null){
+        console.log("Active step ID: " + activeStepElement.id);
+        console.log("Active progression steps: " + activeProgressionObject.steps);
 
         //get the step name (p tag) of the active step and set contentEditable to true
-        let node = activeStep.querySelector(".title-step");
+        let node = activeStepElement.querySelector(".title-step");
         node.contentEditable = true;
 
         //find the step in the array
-        let originalStep = activeProgression.steps.find(x => x.identifier == activeStep.id);
+        let originalStep = activeProgressionObject.steps.find(x => x.identifier == activeStepElement.id);
 
         //select the text upon edit
         if(window.getSelection){
@@ -487,22 +624,36 @@ function editStep(){
                 originalStep.stepName = node.textContent;
 
                 //set active step back to null (deactivate the step)
-                activeStep = null;
+                activeStepElement = null;
+                activeStepObject = null;
             }
         });  
+    }
+    else if (activeProgressionElement != null && activeProgressionObject != null){
+        //get the step name (p tag) of the active step and set contentEditable to true
+        let node = activeProgressionElement.querySelector(".title-progression");
+        node.contentEditable = true;
 
-        // document.addEventListener(["click"], (e) => {
+        //select the text upon edit
+        if(window.getSelection){
+            var selection = window.getSelection();
+            var range = document.createRange();
+            range.selectNodeContents(node);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
 
-        //     activeStep.contentEditable = false;
+        //listen for "enter" keystroke and update only when this happens
+        node.addEventListener(["keydown"], (e) => {
+            if(e.keyCode == 13){
+                //set contentEditable back to false
+                node.contentEditable = false;
 
-        //     //update the name of the step in the array
-        //     originalStep.stepName = activeStep.querySelector(".title-step").textContent;
-
-        //     //set active step back to null
-        //     //activeStep = null;
-            
-        // }); 
-
+                //update the name of the step in the array
+                activeProgressionObject.progressionName = node.textContent;
+                drilldownTitle.textContent = node.textContent;
+            }
+        });
     }
 }
 
