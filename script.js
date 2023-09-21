@@ -4,7 +4,7 @@
  * --Front end
  * Mobile responsiveness (use breakpoints)
  * Convert things to tokens like colors and other styles
- * CRUD operations for progressions (add context menu to each item and refactor methods)
+ * DONE -- CRUD operations for progressions (add context menu to each item and refactor methods)
  * MOVE functionality for steps and progressions
  * Possibly move icon files to local files (maybe do this later)
  * Login screen
@@ -29,6 +29,10 @@
  * EVENTUALLY:
  * Categories for progressions - these will inform the dashboard data
  */
+
+// window.onload = function(){
+
+// }
 
 //----------------OBJECTS-------------------
 class Step {
@@ -97,6 +101,14 @@ function uuidv4() {
     (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
 };
 
+function toggleActiveMobileNav(){
+    let adminSection = document.getElementById("id-section-admin");
+    let adminMenu = document.getElementById("id-menu");
+
+    adminSection.classList.toggle("active-mobile");
+    adminMenu.classList.toggle("active-mobile");
+}
+
 function addContextMenu(listItem, tagType) {
     
     //add the event listener for the context menu
@@ -104,13 +116,11 @@ function addContextMenu(listItem, tagType) {
         
         //set the active progression or step when the context menu is shown (right click)
         if(tagType == 1){
-            activeProgressionElement = document.getElementById(listItem.id);
-            activeProgressionObject = progressionArray.find(x => x.identifier == listItem.id);
-            activeStepElement = null;
+            setActiveProgressionValues(listItem.id);
+            deactivateStep();
         }
         else if (tagType == 2){
-            activeStepElement = document.getElementById(listItem.id);
-            activeStepObject = activeProgressionObject.steps.find(x => x.identifier == listItem.id);
+            setActiveStepValues(listItem.id);
         }
 
         //prevent default context menu
@@ -136,7 +146,7 @@ function addContextMenu(listItem, tagType) {
     return listItem;
 };
 
-function setDrilldownPlaceholder(){
+function setDrilldownContent(){
     let placeholder = document.getElementById("id-drilldown-none-selected");
     let drilldownWrapper = document.getElementById("id-drilldown-wrapper");
 
@@ -161,11 +171,19 @@ function setActiveStepValues(stepId){
 }
 
 function resetActiveItems(){
-    activeProgressionElement = null;
-    activeProgressionObject = null;
+    deactivateProgression();
+    deactivateStep();
+    setDrilldownContent();
+}
+
+function deactivateStep(){
     activeStepElement = null;
     activeStepObject = null;
-    setDrilldownPlaceholder();
+}
+
+function deactivateProgression(){
+    activeProgressionElement = null;
+    activeProgressionObject = null;
 }
 
 //----------------EVENT LISTENERS-------------------
@@ -183,12 +201,6 @@ if (e.key === "Enter") {
 
 document.addEventListener("click", () => {
     contextMenuWrapper.style.visibility = "hidden";
-
-    //disable step editing if click
-    // if(activeStep != null){
-    //     activeStep.contentEditable = false;
-    //     //activeStep = null;
-    // }
 });
 
 function loadData(){
@@ -199,6 +211,12 @@ function loadData(){
 
 //----------------PULL IN CURRENT TAB DATA-------------------
 function getTabData(e){
+    //if in mobile, set nav menu to inactive
+    let adminSection = document.getElementById("id-section-admin");
+    if(adminSection.classList.contains("active-mobile")){
+        toggleActiveMobileNav();
+    }
+
     currentTab = e;
     let listContainer = e.closest("ul");
 
@@ -206,7 +224,7 @@ function getTabData(e){
     resetActiveItems();
 
     //clear the drilldown
-    setDrilldownPlaceholder();
+    setDrilldownContent();
 
     //clear the "active" class from all first
     let childElements = listContainer.querySelectorAll(".menu-item");
@@ -284,11 +302,10 @@ function getProgressionSteps(progressionId){
     currentLI.classList.add("selected");
 
     //set the active progression
-    activeProgressionElement = document.getElementById(progressionId);
-    activeProgressionObject = progressionArray.find(x => x.identifier === progressionId);
+    setActiveProgressionValues(progressionId);
 
     //display the drilldown
-    setDrilldownPlaceholder();
+    setDrilldownContent();
 
     //update the section title
     drilldownTitle.textContent = activeProgressionObject.progressionName;
@@ -451,20 +468,6 @@ function setCompletionValue(){
     }
 
     updateCompletionInUI();
-
-    // let activeProgressionElement = document.getElementById(activeProgression.identifier);
-
-    // console.log("This is working");
-    // console.log("Current tab: " + currentTab.id);
-    // console.log("Percent complete: " + activeProgression.percentComplete);
-
-    // //if 100%, move to Completed tab
-    // if(currentTab != null && currentTab.id == "id-in-progress-tab" && activeProgression.percentComplete == 100){
-    //     listContainer.remove(activeProgressionElement);
-    // }
-    // else if(currentTab != null && currentTab.id == "id-completed-tab" && activeProgression.percentComplete != 100){
-    //     listContainer.remove(activeProgressionElement);
-    // }
 }
 
 function updateCompletionInUI(){
@@ -487,7 +490,7 @@ function deleteListItem(){
         setCompletionValue();
 
         //set active step back to null
-        activeStepElement = null;
+        deactivateStep();
     }
     else if (activeProgressionElement != null && activeProgressionObject != null){
         activeProgressionElement.remove();
@@ -499,7 +502,7 @@ function deleteListItem(){
         resetActiveItems();
 
         //clear the drilldown
-        setDrilldownPlaceholder();
+        setDrilldownContent();
     }
 }
 
@@ -531,8 +534,7 @@ function duplicateListItem(){
         setCompletionValue();       
 
         //set active step back to null
-        activeStepElement = null;
-        activeStepObject = null;
+        deactivateStep();
     }
     else if (activeProgressionElement != null && activeProgressionObject != null){
         //clone the element + any child elements in the node tree
@@ -555,7 +557,7 @@ function duplicateListItem(){
         progressionArray.push(newProgression);
 
         //add the context menu
-        duplicatedElement = addContextMenu(duplicatedElement, stepTag);
+        duplicatedElement = addContextMenu(duplicatedElement, progressionTag);
 
         //update the id on the element to not be a dup of the original
         duplicatedElement.id = newProgression.identifier;
@@ -578,7 +580,7 @@ function editListItem(){
     console.log("Active Step: " + activeStepObject);
     console.log("Active Progression: " + activeProgressionObject.progressionName);
 
-    if(activeStepElement != null){
+    if(activeStepElement != null && activeStepObject != null){
         console.log("Active step ID: " + activeStepElement.id);
         console.log("Active progression steps: " + activeProgressionObject.steps);
 
@@ -608,8 +610,7 @@ function editListItem(){
                 originalStep.stepName = node.textContent;
 
                 //set active step back to null (deactivate the step)
-                activeStepElement = null;
-                activeStepObject = null;
+                deactivateStep();
             }
         });  
     }

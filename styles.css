@@ -8,12 +8,14 @@
 body
 {
     overflow-y: auto;
+    background-color: #202020;
 }
 
 .flex-container
 {
     display: flex;
     height: 100%;
+    max-width: 4000px;
 }
 
 .flex-child
@@ -74,6 +76,11 @@ p
     height: 100vh;
     width: 40vw;
     background-color: #202020; /* turn this into a token later */
+}
+
+.hamburger-menu
+{
+    display: none;
 }
 
 .menu
@@ -356,7 +363,7 @@ ul
     opacity: 25%;
 }
 
-.title-step:focus
+.title-step:focus, .title-progression:focus
 {
     outline: none;
 }
@@ -380,4 +387,93 @@ ul
 #id-drilldown-none-selected h1
 {
     text-align: center;
+}
+
+/* Small devices (phones, 1000px and down) */
+@media only screen and (max-width: 1000px){
+
+    /*---------------MENU MOBILE TREATMENT---------------*/
+    .menu
+    {
+        animation: fadeout .25s forwards;
+    }
+
+    .hamburger-menu
+    {
+        text-align: left;
+        padding: 1rem;
+        margin: 8px 0;
+        display: block;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .section-admin, .section-admin:hover
+    {
+        /* position: sticky; */
+        position: fixed;
+        padding: 2rem 0;
+        width: 65px;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        height: 100vh;
+        z-index: 2;
+        /* flex-basis: 65px;
+        flex-grow: 0;
+        flex-shrink: 4;
+        overflow: hidden;
+        transition: all 0.25s ease-in-out; */
+        background-color: #272727; /* turn this into a token later */
+    }
+
+    .section-admin.active-mobile
+    {
+        width: 50%;
+        transition: .25s;
+        padding: 2rem 1rem;
+    }
+
+    .menu.active-mobile
+    {
+        animation: fadein .25s forwards;
+    }
+
+    .active-mobile
+    {
+        display: block;
+    }
+
+    .section-main
+    {
+        padding: 48px 20px;
+        margin-left: 65px;
+    }
+
+    .section-drilldown
+    {
+        display: none;
+    }
+
+    .list-item
+    {
+        padding: 16px 8px;
+    }
+}
+
+@media only screen and (max-width: 400px){
+    .section-admin.active-mobile
+    {
+        width: 75%;
+    }
+}
+
+@keyframes fadein {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes fadeout {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
 }
