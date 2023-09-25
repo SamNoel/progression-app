@@ -368,6 +368,25 @@ ul
     outline: none;
 }
 
+.drilldown-header-section
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fa-xmark
+{
+    padding: 16px;
+    border-radius: 5px;
+}
+
+.fa-xmark:hover
+{
+    background-color: #5C5C5C;
+    cursor: pointer;
+}
+
 #id-drilldown-none-selected
 {
     display: none;
@@ -401,7 +420,7 @@ ul
     .hamburger-menu
     {
         text-align: left;
-        padding: 1rem;
+        padding: 1rem 1rem 1rem 1.5rem;
         margin: 8px 0;
         display: block;
         align-items: center;
@@ -410,7 +429,6 @@ ul
 
     .section-admin, .section-admin:hover
     {
-        /* position: sticky; */
         position: fixed;
         padding: 2rem 0;
         width: 65px;
@@ -418,12 +436,7 @@ ul
         left: 0;
         bottom: 0;
         height: 100vh;
-        z-index: 2;
-        /* flex-basis: 65px;
-        flex-grow: 0;
-        flex-shrink: 4;
-        overflow: hidden;
-        transition: all 0.25s ease-in-out; */
+        z-index: 3;
         background-color: #272727; /* turn this into a token later */
     }
 
@@ -446,13 +459,28 @@ ul
 
     .section-main
     {
+        position: fixed;
+        width: calc(95% - 65px);
         padding: 48px 20px;
         margin-left: 65px;
     }
 
     .section-drilldown
     {
-        display: none;
+        /* display: none; */
+        position: fixed;
+        top: 0;
+        left: 100%;
+        z-index: 2;
+        transition: .25s;
+        padding: 48px 20px;
+    }
+
+    .section-drilldown.active-mobile
+    {
+        left: 50%;
+        transition: .25s;
+        width: 45vw;
     }
 
     .list-item
@@ -461,10 +489,31 @@ ul
     }
 }
 
-@media only screen and (max-width: 400px){
+@media only screen and (max-width: 600px){
+    /* .hamburger-menu
+    {
+        padding: .5rem;
+    }
+    
+    .section-admin
+    {
+        width: 15px;
+    } */
+
+    .section-main
+    {
+        width: calc(90% - 65px);
+    }
+
     .section-admin.active-mobile
     {
         width: 75%;
+    }
+
+    .section-drilldown.active-mobile
+    {
+        left: 65px;
+        width: calc(90% - 65px);
     }
 }
 

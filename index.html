@@ -76,9 +76,12 @@
         </div>
 
         <!--DRILLDOWN SECTION-->
-        <div class="section-drilldown flex-child">
-            <div id="id-drilldown-wrapper">       
-                <h1 id="id-drilldown-title"></h1><!--POPULATED DYNAMICALLY-->
+        <div class="section-drilldown flex-child" id="id-section-drilldown">
+            <div id="id-drilldown-wrapper">   
+                <div class="drilldown-header-section" id="id-drilldown-header-section">
+                    <h1 id="id-drilldown-title"></h1><!--POPULATED DYNAMICALLY-->
+                    <i class="fa-solid fa-xmark" style="color: #ffffff;" onclick="closeDrilldown()"></i>
+                </div>    
                 <hr class="divider-solid">
                 <div class="steps-container">
                     <ul class="steps-list list-container" id="id-steps-list">

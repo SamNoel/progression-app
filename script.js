@@ -2,7 +2,7 @@
  * TO DO:
  * 
  * --Front end
- * Mobile responsiveness (use breakpoints)
+ * DONE -- Mobile responsiveness (use breakpoints)
  * Convert things to tokens like colors and other styles
  * DONE -- CRUD operations for progressions (add context menu to each item and refactor methods)
  * MOVE functionality for steps and progressions
@@ -83,6 +83,7 @@ let progressionArray = [];
 //----------------VARIABLE DEFINITIONS-------------------
 const addProgressionInputBox = document.getElementById("id-active-progression-input-box");
 const addStepInputBox = document.getElementById("input-box-step");
+const drilldownSection = document.getElementById("id-section-drilldown");
 const listContainer = document.getElementById("id-active-progressions-list");
 const stepsContainer = document.getElementById("id-steps-list");
 const contextMenuWrapper = document.querySelector(".rightclick-menu-wrapper");
@@ -186,6 +187,21 @@ function deactivateProgression(){
     activeProgressionObject = null;
 }
 
+function checkMobileView(){
+    let hamburgerMenuDisplay = document.getElementById("id-hamburger-menu");
+
+    if (hamburgerMenuDisplay.style.display != "none"){
+        return true;
+    }
+
+    // let adminSection = document.getElementById("id-section-admin");
+    // if(adminSection.classList.contains("active-mobile")){
+    //     return true;
+    // }
+    
+    return false;
+}
+
 //----------------EVENT LISTENERS-------------------
 addProgressionInputBox.addEventListener("keydown", function (e) {
     if (e.key === "Enter") {  
@@ -215,6 +231,10 @@ function getTabData(e){
     let adminSection = document.getElementById("id-section-admin");
     if(adminSection.classList.contains("active-mobile")){
         toggleActiveMobileNav();
+
+        if (drilldownSection.classList.contains("active-mobile")){
+            drilldownSection.classList.toggle("active-mobile");
+        }
     }
 
     currentTab = e;
@@ -296,6 +316,11 @@ function getProgressions(category){
 
 //----------------PULL IN CURRENT STEPS-------------------
 function getProgressionSteps(progressionId){
+
+    if (checkMobileView()){
+        drilldownSection.classList.toggle("active-mobile");
+        console.log("Mobile drilldown active");
+    }
 
     //set current li to active - CURRENTLY NOT WORKING
     let currentLI = document.getElementById(progressionId);
@@ -655,3 +680,18 @@ function editListItem(){
 //         originalStep.stepName = activeStep.querySelector(".title-step").textContent;
 //     }
 // }
+
+function closeDrilldown(){
+    console.log("Close working");
+
+    if (drilldownSection.classList.contains("active-mobile")){
+        console.log("Drilldown active");
+        drilldownSection.classList.remove("active-mobile");
+    }
+
+    //reset the active progression
+    resetActiveItems();
+
+    //clear the drilldown
+    setDrilldownContent();
+}
