@@ -124,8 +124,9 @@ function addContextMenu(listItem, tagType) {
             setActiveStepValues(listItem.id);
         }
 
-        //prevent default context menu
+        //prevent default context menu on desktop and mobile
         e.preventDefault();
+        e.stopPropagation();
 
         //set menu location to wherever the mouse is
         let x = e.clientX, y = e.clientY;

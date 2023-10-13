@@ -51,7 +51,8 @@ p
     top: 0;
     left: 0;
     bottom: 0;
-    height: 100vh;
+    /* height: calc(90vh - 65px); */
+    height: 89vh;
     flex-basis: 50px;
 	flex-grow: 0;
 	flex-shrink: 4;
@@ -85,7 +86,8 @@ p
 
 .menu
 {
-    height: 88%;
+    /* height: calc(90vh - 65px); */
+    height: 88vh;
     position: relative;
     list-style: none;
     padding: 0;
@@ -163,7 +165,7 @@ ul
 .divider-solid
 {
     border-top: 1px solid #4A4A4A;
-    margin: 32px 0px;
+    margin: 16px 0px;
     width: 100%;
     opacity: 25%;
 }
@@ -173,7 +175,7 @@ ul
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px 16px;
+    padding: 12px 16px;
     margin: 8px 0px;
     background-color: #4A4A4A;
     border-radius: 5px;
@@ -422,7 +424,7 @@ ul
     {
         text-align: left;
         padding: 1rem 1rem 1rem 1.5rem;
-        margin: 24px 16px;
+        margin: 24px 16px 0px 16px;
         display: block;
         position: fixed;
         align-items: center;
